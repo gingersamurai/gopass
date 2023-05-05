@@ -1,6 +1,6 @@
 package usecase
 
 type Cipher interface {
-	Encrypt(data, key []byte) ([]byte, error)
-	Decrypt(data, key []byte) ([]byte, error)
+	Encrypt(data []byte) ([]byte, error)
+	Decrypt(data []byte) ([]byte, error)
 }
