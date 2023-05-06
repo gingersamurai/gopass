@@ -1,38 +1,8 @@
-package storage
+package memory_storage
 
 import (
-	"errors"
 	"fmt"
 	"gopass/internal/entity"
-	"gopass/internal/usecase"
-	"sync"
-)
-
-type MemoryStorage struct {
-	sync.RWMutex
-	cipher usecase.Cipher
-
-	userData   map[int64]entity.User
-	nextUserId int64
-
-	accountData   map[int64]entity.Account
-	nextAccountId int64
-}
-
-func NewMemoryStorage(cipher usecase.Cipher) *MemoryStorage {
-	userData := make(map[int64]entity.User)
-	accountData := make(map[int64]entity.Account)
-	return &MemoryStorage{
-		userData:    userData,
-		accountData: accountData,
-		cipher:      cipher,
-	}
-}
-
-var (
-	errNotFound    = errors.New("MemoryStorage: account not found")
-	errCantDecrypt = errors.New("MemoryStorage: cant decrypt data")
-	errCantEncrypt = errors.New("MemoryStorage: cant encrypt data")
 )
 
 func (ms *MemoryStorage) GetAccount(id int64) (entity.Account, error) {
@@ -41,7 +11,7 @@ func (ms *MemoryStorage) GetAccount(id int64) (entity.Account, error) {
 
 	result, ok := ms.accountData[id]
 	if !ok {
-		return entity.Account{}, errNotFound
+		return entity.Account{}, errAccountNotFound
 	}
 
 	decryptedPassword, err := ms.cipher.Decrypt([]byte(result.Password))
@@ -71,8 +41,11 @@ func (ms *MemoryStorage) AddAccount(account entity.Account) (int64, error) {
 }
 
 func (ms *MemoryStorage) DeleteAccount(id int64) error {
+	ms.Lock()
+	defer ms.Unlock()
+
 	if _, ok := ms.accountData[id]; ok {
-		return errNotFound
+		return errAccountNotFound
 	}
 
 	delete(ms.accountData, id)
