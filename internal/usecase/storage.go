@@ -9,7 +9,7 @@ type Storage interface {
 }
 
 type ServiceStorage interface {
-	AddService(user entity.Service) (int64, error)
+	AddService(service entity.Service) (int64, error)
 	GetService(id int64) (entity.Service, error)
 	DeleteService(id int64) error
 }
