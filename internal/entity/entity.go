@@ -9,7 +9,12 @@ type Account struct {
 }
 
 type User struct {
-	Id       int64
-	Login    string
-	Password string
+	Id    int64
+	Login string
+	Key   string
+}
+
+type Service struct {
+	Id   int64
+	Name string
 }
