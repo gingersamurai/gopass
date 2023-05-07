@@ -14,12 +14,12 @@ func (ms *MemoryStorage) GetAccount(id int64) (entity.Account, error) {
 		return entity.Account{}, errAccountNotFound
 	}
 
-	decryptedPassword, err := ms.cipher.Decrypt([]byte(result.Password))
+	decryptedPassword, err := ms.cipher.Decrypt(result.Password)
 	if err != nil {
 		return entity.Account{}, fmt.Errorf("%w: %w", errCantDecrypt, err)
 	}
 
-	result.Password = string(decryptedPassword)
+	result.Password = decryptedPassword
 
 	return result, nil
 }
@@ -28,11 +28,11 @@ func (ms *MemoryStorage) AddAccount(account entity.Account) (int64, error) {
 	ms.Lock()
 	defer ms.Unlock()
 
-	encryptedPassword, err := ms.cipher.Encrypt([]byte(account.Password))
+	encryptedPassword, err := ms.cipher.Encrypt(account.Password)
 	if err != nil {
 		return 0, fmt.Errorf("%w: %w", errCantEncrypt, err)
 	}
-	account.Password = string(encryptedPassword)
+	account.Password = encryptedPassword
 
 	account.Id = ms.nextAccountId
 	ms.nextAccountId++

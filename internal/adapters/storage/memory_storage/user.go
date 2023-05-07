@@ -13,12 +13,12 @@ func (ms *MemoryStorage) GetUser(id int64) (entity.User, error) {
 		return entity.User{}, errUserNotFound
 	}
 
-	decryptedPassword, err := ms.cipher.Decrypt([]byte(result.Password))
+	decryptedPassword, err := ms.cipher.Decrypt(result.Password)
 	if err != nil {
 		return entity.User{}, errCantDecrypt
 	}
 
-	result.Password = string(decryptedPassword)
+	result.Password = decryptedPassword
 
 	return result, nil
 }
@@ -27,12 +27,12 @@ func (ms *MemoryStorage) AddUser(user entity.User) (int64, error) {
 	ms.Lock()
 	defer ms.Unlock()
 
-	encryptedPassword, err := ms.cipher.Encrypt([]byte(user.Password))
+	encryptedPassword, err := ms.cipher.Encrypt(user.Password)
 	if err != nil {
 		return 0, errCantEncrypt
 	}
 
-	user.Password = string(encryptedPassword)
+	user.Password = encryptedPassword
 
 	user.Id = ms.nextUserId
 	ms.nextUserId++
