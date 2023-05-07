@@ -3,18 +3,26 @@ package usecase
 import "gopass/internal/entity"
 
 type Storage interface {
-	AccountStorage
+	ServiceStorage
 	UserStorage
+	AccountStorage
 }
 
-type AccountStorage interface {
-	GetAccount(id int64) (entity.Account, error)
-	AddAccount(account entity.Account) (int64, error)
-	DeleteAccount(id int64) error
+type ServiceStorage interface {
+	AddService(user entity.User) (int64, error)
+	GetService(id int64) (entity.User, error)
+	DeleteService(id int64) error
 }
 
 type UserStorage interface {
+	AddUser(login, password string) (int64, error)
 	GetUser(id int64) (entity.User, error)
-	AddUser(user entity.User) (int64, error)
+	GetUserByLoginAndPassword(login, password string) (entity.User, error)
 	DeleteUser(id int64) error
+}
+
+type AccountStorage interface {
+	AddAccount(account entity.Account) (int64, error)
+	GetAccount(id int64) (entity.Account, error)
+	DeleteAccount(id int64) error
 }
