@@ -1,4 +1,4 @@
-package cipher
+package encrypter
 
 import (
 	"bytes"
@@ -12,37 +12,37 @@ import (
 )
 
 var (
-	errCannotCreate = errors.New("aes cipher: cannot create cipher")
+	errCannotCreate = errors.New("aes encrypter: cannot create encrypter")
 )
 
-type AESCipher struct {
+type AESEncrypter struct {
 	cipher cipher.Block
 }
 
-func NewAESCipher(key []byte) (*AESCipher, error) {
-	result, err := aes.NewCipher(key)
+func NewAESEncrypter(key string) (*AESEncrypter, error) {
+	result, err := aes.NewCipher([]byte(key))
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", errCannotCreate, err)
 	}
 
-	return &AESCipher{
+	return &AESEncrypter{
 		cipher: result,
 	}, nil
 }
 
-func (aesc *AESCipher) addPadding(rawMessage []byte) []byte {
+func (aesc *AESEncrypter) addPadding(rawMessage []byte) []byte {
 	paddingLength := aesc.cipher.BlockSize() - len(rawMessage)%aesc.cipher.BlockSize()
 	padding := bytes.Repeat([]byte{byte(paddingLength)}, paddingLength)
 
 	return append(rawMessage, padding...)
 }
 
-func (aesc *AESCipher) removePadding(paddedRawMessage []byte) []byte {
+func (aesc *AESEncrypter) removePadding(paddedRawMessage []byte) []byte {
 	padding := int(paddedRawMessage[len(paddedRawMessage)-1])
 	return paddedRawMessage[:len(paddedRawMessage)-padding]
 }
 
-func (aesc *AESCipher) Encrypt(message string) (string, error) {
+func (aesc *AESEncrypter) Encrypt(message string) (string, error) {
 
 	paddedRawMessage := aesc.addPadding([]byte(message))
 
@@ -50,7 +50,7 @@ func (aesc *AESCipher) Encrypt(message string) (string, error) {
 
 	iv := cipherText[:aesc.cipher.BlockSize()]
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return "", fmt.Errorf("AESCipher.Encrypt(): %w", err)
+		return "", fmt.Errorf("AESEncrypter.Encrypt(): %w", err)
 	}
 
 	mode := cipher.NewCBCEncrypter(aesc.cipher, iv)
@@ -59,8 +59,8 @@ func (aesc *AESCipher) Encrypt(message string) (string, error) {
 	return hex.EncodeToString(cipherText), nil
 }
 
-func (aesc *AESCipher) Decrypt(messageCipher string) (string, error) {
-	rawMessageCipher, err := hex.DecodeString(messageCipher)
+func (aesc *AESEncrypter) Decrypt(encryptedMessage string) (string, error) {
+	rawMessageCipher, err := hex.DecodeString(encryptedMessage)
 	if err != nil {
 		return "", err
 	}
