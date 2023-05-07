@@ -1,6 +1,10 @@
 package memory_storage
 
-import "gopass/internal/entity"
+import (
+	"fmt"
+	"gopass/internal/entity"
+	"gopass/internal/usecase"
+)
 
 func (ms *MemoryStorage) AddService(service entity.Service) (int64, error) {
 	ms.Lock()
@@ -18,7 +22,7 @@ func (ms *MemoryStorage) GetService(id int64) (entity.Service, error) {
 	defer ms.RUnlock()
 
 	if _, ok := ms.serviceData[id]; !ok {
-		return entity.Service{}, errServiceNotFound
+		return entity.Service{}, fmt.Errorf("memoryStorage.GetService(): %w", usecase.ErrServiceNotFound)
 	}
 
 	return ms.serviceData[id], nil
@@ -29,7 +33,7 @@ func (ms *MemoryStorage) DeleteService(id int64) error {
 	defer ms.Unlock()
 
 	if _, ok := ms.serviceData[id]; !ok {
-		return errServiceNotFound
+		return fmt.Errorf("memoryStorage.GetService(): %w", usecase.ErrServiceNotFound)
 	}
 	delete(ms.serviceData, id)
 	return nil
