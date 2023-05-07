@@ -9,9 +9,9 @@ type Account struct {
 }
 
 type User struct {
-	Id           int64
-	Login        string
-	PasswordHash string
+	Id       int64
+	Login    string
+	Password string
 }
 
 type Service struct {
