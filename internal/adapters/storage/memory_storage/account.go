@@ -6,11 +6,11 @@ import (
 	"gopass/internal/usecase"
 )
 
-func (ms *MemoryStorage) AddAccount(account entity.Account) (int64, error) {
+func (ms *MemoryStorage) AddAccount(key string, account entity.Account) (int64, error) {
 	ms.Lock()
 	defer ms.Unlock()
 
-	encryptedPassword, err := ms.symmetricEncrypter.Encrypt(account.Password)
+	encryptedPassword, err := ms.symmetricEncrypter.Encrypt(key, account.Password)
 	if err != nil {
 		return 0, fmt.Errorf("memoryStorage.AddAccount(): %w", err)
 	}
@@ -22,7 +22,7 @@ func (ms *MemoryStorage) AddAccount(account entity.Account) (int64, error) {
 	return account.Id, nil
 }
 
-func (ms *MemoryStorage) GetAccount(id int64) (entity.Account, error) {
+func (ms *MemoryStorage) GetAccount(key string, id int64) (entity.Account, error) {
 	ms.RLock()
 	defer ms.RUnlock()
 
@@ -31,7 +31,7 @@ func (ms *MemoryStorage) GetAccount(id int64) (entity.Account, error) {
 		return entity.Account{}, fmt.Errorf("memoryStorage.GetAccount(): %w", usecase.ErrAccountNotFound)
 	}
 
-	decryptedPassword, err := ms.symmetricEncrypter.Decrypt(result.Password)
+	decryptedPassword, err := ms.symmetricEncrypter.Decrypt(key, result.Password)
 	if err != nil {
 		return entity.Account{}, fmt.Errorf("memoryStorage.GetAccount(): %w", err)
 	}

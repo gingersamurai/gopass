@@ -14,8 +14,7 @@ func TestMemoryStorage(t *testing.T) {
 
 		asynEnc := encrypter.NewBcryptEncrypter()
 
-		synEnc, err := encrypter.NewAESEncrypter(secretKey)
-		assert.NoError(t, err)
+		synEnc := encrypter.NewAESEncrypter()
 
 		ms := NewMemoryStorage(synEnc, asynEnc)
 
@@ -42,12 +41,10 @@ func TestMemoryStorage(t *testing.T) {
 	})
 
 	t.Run("simple service", func(t *testing.T) {
-		secretKey := "0123456789abcdef"
 
 		asynEnc := encrypter.NewBcryptEncrypter()
 
-		synEnc, err := encrypter.NewAESEncrypter(secretKey)
-		assert.NoError(t, err)
+		synEnc := encrypter.NewAESEncrypter()
 
 		ms := NewMemoryStorage(synEnc, asynEnc)
 
@@ -71,23 +68,21 @@ func TestMemoryStorage(t *testing.T) {
 
 		asynEnc := encrypter.NewBcryptEncrypter()
 
-		synEnc, err := encrypter.NewAESEncrypter(secretKey)
-		assert.NoError(t, err)
-
+		synEnc := encrypter.NewAESEncrypter()
 		ms := NewMemoryStorage(synEnc, asynEnc)
 
 		myAccount := entity.Account{UserId: 1, ServiceId: 2, Login: "ebumba", Password: "bibaboba123"}
-		id, err := ms.AddAccount(myAccount)
+		id, err := ms.AddAccount(secretKey, myAccount)
 		assert.NoError(t, err)
 
-		account, err := ms.GetAccount(id)
+		account, err := ms.GetAccount(secretKey, id)
 		assert.NoError(t, err)
 		assert.Equal(t, myAccount, account)
 
 		err = ms.DeleteAccount(id)
 		assert.NoError(t, err)
 
-		_, err = ms.GetAccount(id)
+		_, err = ms.GetAccount(secretKey, id)
 		assert.Error(t, err)
 	})
 }
