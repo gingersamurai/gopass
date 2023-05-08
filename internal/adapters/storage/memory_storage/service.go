@@ -28,6 +28,19 @@ func (ms *MemoryStorage) GetService(id int64) (entity.Service, error) {
 	return ms.serviceData[id], nil
 }
 
+func (ms *MemoryStorage) GetServiceByName(name string) (entity.Service, error) {
+	ms.RLock()
+	defer ms.RUnlock()
+
+	for _, service := range ms.serviceData {
+		if service.Name == name {
+			return service, nil
+		}
+	}
+
+	return entity.Service{}, usecase.ErrServiceNotFound
+}
+
 func (ms *MemoryStorage) DeleteService(id int64) error {
 	ms.Lock()
 	defer ms.Unlock()

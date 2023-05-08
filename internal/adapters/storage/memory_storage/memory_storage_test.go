@@ -56,6 +56,10 @@ func TestMemoryStorage(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, service, myService)
 
+		serviceByName, err := ms.GetServiceByName("tiktok")
+		assert.NoError(t, err)
+		assert.Equal(t, service, serviceByName)
+
 		err = ms.DeleteService(id)
 		assert.NoError(t, err)
 
