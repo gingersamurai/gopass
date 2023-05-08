@@ -79,6 +79,13 @@ func TestMemoryStorage(t *testing.T) {
 		id, err := ms.AddAccount(secretKey, myAccount)
 		assert.NoError(t, err)
 
+		myYAAccount := entity.Account{UserId: 1, ServiceId: 3, Login: "ebumba", Password: "bibaboba123"}
+		_, err = ms.AddAccount(secretKey, myYAAccount)
+		assert.NoError(t, err)
+
+		accounts, err := ms.GetAccountsByServiceId(secretKey, 2)
+		assert.Equal(t, accounts, []entity.Account{myAccount})
+
 		account, err := ms.GetAccount(secretKey, id)
 		assert.NoError(t, err)
 		assert.Equal(t, myAccount, account)

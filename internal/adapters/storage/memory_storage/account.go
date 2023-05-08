@@ -41,6 +41,28 @@ func (ms *MemoryStorage) GetAccount(key string, id int64) (entity.Account, error
 	return result, nil
 }
 
+func (ms *MemoryStorage) GetAccountsByServiceId(key string, serviceId int64) ([]entity.Account, error) {
+	ms.RLock()
+	defer ms.RUnlock()
+
+	var result []entity.Account
+	for _, account := range ms.accountData {
+		if account.ServiceId != serviceId {
+			continue
+		}
+
+		decryptedPassword, err := ms.symmetricEncrypter.Decrypt(key, account.Password)
+		if err != nil {
+			return nil, fmt.Errorf("memoryStorage.GetAccountsByServiceId(): %w", err)
+		}
+		account.Password = decryptedPassword
+
+		result = append(result, account)
+	}
+
+	return result, nil
+}
+
 func (ms *MemoryStorage) DeleteAccount(id int64) error {
 	ms.Lock()
 	defer ms.Unlock()

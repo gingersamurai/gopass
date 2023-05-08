@@ -36,5 +36,6 @@ type UserStorage interface {
 type AccountStorage interface {
 	AddAccount(key string, account entity.Account) (int64, error)
 	GetAccount(key string, id int64) (entity.Account, error)
+	GetAccountsByServiceId(key string, serviceId int64) ([]entity.Account, error)
 	DeleteAccount(id int64) error
 }
