@@ -3,7 +3,7 @@ package entity
 type Account struct {
 	Id        int64
 	UserId    int64
-	ServiceId int
+	ServiceId int64
 	Login     string
 	Password  string
 }
