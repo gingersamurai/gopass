@@ -45,7 +45,7 @@ func (ms *MemoryStorage) DeleteAccount(id int64) error {
 	ms.Lock()
 	defer ms.Unlock()
 
-	if _, ok := ms.accountData[id]; ok {
+	if _, ok := ms.accountData[id]; !ok {
 		return fmt.Errorf("memoryStorage.DeleteAccount(): %w", usecase.ErrAccountNotFound)
 	}
 
