@@ -2,8 +2,8 @@ package memory_storage
 
 import (
 	"fmt"
+	"gopass/internal/adapters/storage"
 	"gopass/internal/entity"
-	"gopass/internal/usecase"
 )
 
 func (ms *MemoryStorage) AddUser(login, password string) (int64, error) {
@@ -12,7 +12,7 @@ func (ms *MemoryStorage) AddUser(login, password string) (int64, error) {
 
 	for _, user := range ms.userData {
 		if user.Login == login {
-			return 0, fmt.Errorf("memoryStorage.AddUser(): %w", usecase.ErrUserAlreadyExists)
+			return 0, fmt.Errorf("memoryStorage.AddUser(): %w", storage.ErrUserAlreadyExists)
 		}
 	}
 
@@ -39,7 +39,7 @@ func (ms *MemoryStorage) GetUser(id int64) (entity.User, error) {
 
 	user, ok := ms.userData[id]
 	if !ok {
-		return entity.User{}, fmt.Errorf("memoryStorage.GetUser(): %w", usecase.ErrUserNotFound)
+		return entity.User{}, fmt.Errorf("memoryStorage.GetUser(): %w", storage.ErrUserNotFound)
 	}
 
 	return user, nil
@@ -61,12 +61,12 @@ func (ms *MemoryStorage) GetUserByLoginAndPassword(login, password string) (enti
 
 	return entity.User{}, fmt.Errorf(
 		"memoryStorage.GetUserByLoginAndPassword(): %w",
-		usecase.ErrWrongPassword)
+		storage.ErrWrongPassword)
 }
 
 func (ms *MemoryStorage) DeleteUser(id int64) error {
 	if _, ok := ms.userData[id]; !ok {
-		return fmt.Errorf("memoryStorage.DeleteUser: %w", usecase.ErrUserNotFound)
+		return fmt.Errorf("memoryStorage.DeleteUser: %w", storage.ErrUserNotFound)
 	}
 
 	delete(ms.userData, id)

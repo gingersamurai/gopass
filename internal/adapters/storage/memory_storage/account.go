@@ -2,8 +2,8 @@ package memory_storage
 
 import (
 	"fmt"
+	"gopass/internal/adapters/storage"
 	"gopass/internal/entity"
-	"gopass/internal/usecase"
 )
 
 func (ms *MemoryStorage) AddAccount(key string, account entity.Account) (int64, error) {
@@ -28,7 +28,7 @@ func (ms *MemoryStorage) GetAccount(key string, id int64) (entity.Account, error
 
 	result, ok := ms.accountData[id]
 	if !ok {
-		return entity.Account{}, fmt.Errorf("memoryStorage.GetAccount(): %w", usecase.ErrAccountNotFound)
+		return entity.Account{}, fmt.Errorf("memoryStorage.GetAccount(): %w", storage.ErrAccountNotFound)
 	}
 
 	decryptedPassword, err := ms.symmetricEncrypter.Decrypt(key, result.Password)
@@ -68,7 +68,7 @@ func (ms *MemoryStorage) DeleteAccount(id int64) error {
 	defer ms.Unlock()
 
 	if _, ok := ms.accountData[id]; !ok {
-		return fmt.Errorf("memoryStorage.DeleteAccount(): %w", usecase.ErrAccountNotFound)
+		return fmt.Errorf("memoryStorage.DeleteAccount(): %w", storage.ErrAccountNotFound)
 	}
 
 	delete(ms.accountData, id)

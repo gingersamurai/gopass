@@ -1,16 +1,16 @@
 package memory_storage
 
 import (
+	"gopass/internal/adapters/storage"
 	"gopass/internal/entity"
-	"gopass/internal/usecase"
 	"sync"
 )
 
 type MemoryStorage struct {
 	sync.RWMutex
 
-	symmetricEncrypter  usecase.SymmetricEncrypter
-	asymmetricEncrypter usecase.AsymmetricEncrypter
+	symmetricEncrypter  storage.SymmetricEncrypter
+	asymmetricEncrypter storage.AsymmetricEncrypter
 
 	serviceData map[int64]entity.Service
 	userData    map[int64]entity.User
@@ -21,7 +21,7 @@ type MemoryStorage struct {
 	nextAccountId int64
 }
 
-func NewMemoryStorage(se usecase.SymmetricEncrypter, ae usecase.AsymmetricEncrypter) *MemoryStorage {
+func NewMemoryStorage(se storage.SymmetricEncrypter, ae storage.AsymmetricEncrypter) *MemoryStorage {
 	serviceData := make(map[int64]entity.Service)
 	userData := make(map[int64]entity.User)
 	accountData := make(map[int64]entity.Account)
