@@ -1,11 +1,11 @@
 package entity
 
 type Account struct {
-	Id       int64
-	UserId   int64
-	Service  string
-	Login    string
-	Password string
+	Id        int64
+	UserId    int64
+	ServiceId int
+	Login     string
+	Password  string
 }
 
 type User struct {
