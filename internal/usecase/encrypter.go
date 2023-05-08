@@ -1,8 +1,8 @@
 package usecase
 
 type SymmetricEncrypter interface {
-	Encrypt(message string) (string, error)
-	Decrypt(encryptedMessage string) (string, error)
+	Encrypt(key, message string) (string, error)
+	Decrypt(key, encryptedMessage string) (string, error)
 }
 
 type AsymmetricEncrypter interface {
