@@ -29,11 +29,11 @@ func (mc *MemoryCache) GetKey(userId int64) (string, error) {
 	}
 }
 
-func (mc *MemoryCache) AddKey(userId int64, key string) error {
+func (mc *MemoryCache) AddKey(userId int64, key string, lifetime time.Duration) error {
 	mc.Lock()
 	defer mc.Unlock()
 
-	if _, err := mc.GetKey(userId); err == nil {
+	if _, ok := mc.data[userId]; ok {
 		return fmt.Errorf("memoryCache.AddKey(): %w", cache.ErrAlreadyExists)
 	}
 
@@ -41,8 +41,9 @@ func (mc *MemoryCache) AddKey(userId int64, key string) error {
 		UserId: userId,
 		Key:    key,
 	}
+
 	go func() {
-		time.Sleep(time.Second * 60 * 5)
+		time.Sleep(lifetime)
 		_ = mc.DeleteKey(userId)
 	}()
 	return nil
@@ -52,9 +53,10 @@ func (mc *MemoryCache) DeleteKey(userId int64) error {
 	mc.Lock()
 	defer mc.Unlock()
 
-	if _, err := mc.GetKey(userId); err != nil {
+	if _, ok := mc.data[userId]; !ok {
 		return fmt.Errorf("memoryCache.AddKey(): %w", cache.ErrNotFound)
 	}
 
 	delete(mc.data, userId)
+	return nil
 }
