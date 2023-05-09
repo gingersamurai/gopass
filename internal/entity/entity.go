@@ -21,6 +21,6 @@ type Service struct {
 
 type AuthData struct {
 	Id     int64
-	userId int64
-	key    string
+	UserId int64
+	Key    string
 }
