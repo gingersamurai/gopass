@@ -20,7 +20,6 @@ type Service struct {
 }
 
 type AuthData struct {
-	Id     int64
 	UserId int64
 	Key    string
 }
