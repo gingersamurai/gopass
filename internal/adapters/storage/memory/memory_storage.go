@@ -1,4 +1,4 @@
-package memory_storage
+package memory
 
 import (
 	"gopass/internal/adapters/storage"

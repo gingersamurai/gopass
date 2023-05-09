@@ -3,7 +3,7 @@ package usecase
 import (
 	"github.com/stretchr/testify/assert"
 	"gopass/internal/adapters/encrypter"
-	"gopass/internal/adapters/storage/memory_storage"
+	"gopass/internal/adapters/storage/memory"
 	"testing"
 )
 
@@ -12,7 +12,7 @@ func TestUserInteractor(t *testing.T) {
 		se := encrypter.NewAESEncrypter()
 		ae := encrypter.NewBcryptEncrypter()
 
-		storage := memory_storage.NewMemoryStorage(se, ae)
+		storage := memory.NewMemoryStorage(se, ae)
 
 		uin := NewUserInteractor(storage, ae)
 
@@ -22,7 +22,7 @@ func TestUserInteractor(t *testing.T) {
 		assert.NoError(t, err)
 		user, err := uin.storage.GetUser(id)
 
-		needServiceName := "telegram"
+		needServiceName := "telegram_bot"
 		needLogin := "Ebumba_e"
 		needPassword := "bibaboba123"
 		id, err = uin.Set(user, key, needServiceName, needLogin, needPassword)

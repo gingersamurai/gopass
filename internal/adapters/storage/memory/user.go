@@ -1,4 +1,4 @@
-package memory_storage
+package memory
 
 import (
 	"fmt"
