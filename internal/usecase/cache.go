@@ -5,7 +5,7 @@ type Cache interface {
 }
 
 type AuthDataCache interface {
-	SetKey(key string) error
+	AddKey(key string) error
 	GetKey(key string) (string, error)
 	DeleteKey(key string) error
 }
