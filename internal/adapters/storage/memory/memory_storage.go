@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-type MemoryStorage struct {
+type Storage struct {
 	sync.RWMutex
 
 	symmetricEncrypter  storage.SymmetricEncrypter
@@ -21,11 +21,11 @@ type MemoryStorage struct {
 	nextAccountId int64
 }
 
-func NewMemoryStorage(se storage.SymmetricEncrypter, ae storage.AsymmetricEncrypter) *MemoryStorage {
+func New(se storage.SymmetricEncrypter, ae storage.AsymmetricEncrypter) *Storage {
 	serviceData := make(map[int64]entity.Service)
 	userData := make(map[int64]entity.User)
 	accountData := make(map[int64]entity.Account)
-	return &MemoryStorage{
+	return &Storage{
 		serviceData:         serviceData,
 		userData:            userData,
 		accountData:         accountData,

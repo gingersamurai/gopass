@@ -6,7 +6,7 @@ import (
 	"gopass/internal/entity"
 )
 
-func (ms *MemoryStorage) AddUser(login, password string) (int64, error) {
+func (ms *Storage) AddUser(login, password string) (int64, error) {
 	ms.Lock()
 	defer ms.Unlock()
 
@@ -33,7 +33,7 @@ func (ms *MemoryStorage) AddUser(login, password string) (int64, error) {
 	return user.Id, nil
 }
 
-func (ms *MemoryStorage) GetUser(id int64) (entity.User, error) {
+func (ms *Storage) GetUser(id int64) (entity.User, error) {
 	ms.RLock()
 	defer ms.RUnlock()
 
@@ -45,7 +45,7 @@ func (ms *MemoryStorage) GetUser(id int64) (entity.User, error) {
 	return user, nil
 }
 
-func (ms *MemoryStorage) GetUserByLoginAndPassword(login, password string) (entity.User, error) {
+func (ms *Storage) GetUserByLoginAndPassword(login, password string) (entity.User, error) {
 	ms.RLock()
 	defer ms.RUnlock()
 
@@ -64,7 +64,7 @@ func (ms *MemoryStorage) GetUserByLoginAndPassword(login, password string) (enti
 		storage.ErrWrongPassword)
 }
 
-func (ms *MemoryStorage) DeleteUser(id int64) error {
+func (ms *Storage) DeleteUser(id int64) error {
 	if _, ok := ms.userData[id]; !ok {
 		return fmt.Errorf("memoryStorage.DeleteUser: %w", storage.ErrUserNotFound)
 	}

@@ -16,7 +16,7 @@ func TestMemoryStorage(t *testing.T) {
 
 		synEnc := encrypter.NewAESEncrypter()
 
-		ms := NewMemoryStorage(synEnc, asynEnc)
+		ms := New(synEnc, asynEnc)
 
 		id, err := ms.AddUser(login, secretKey)
 		assert.NoError(t, err)
@@ -46,7 +46,7 @@ func TestMemoryStorage(t *testing.T) {
 
 		synEnc := encrypter.NewAESEncrypter()
 
-		ms := NewMemoryStorage(synEnc, asynEnc)
+		ms := New(synEnc, asynEnc)
 
 		myService := entity.Service{Name: "tiktok"}
 		id, err := ms.AddService(myService)
@@ -73,7 +73,7 @@ func TestMemoryStorage(t *testing.T) {
 		asynEnc := encrypter.NewBcryptEncrypter()
 
 		synEnc := encrypter.NewAESEncrypter()
-		ms := NewMemoryStorage(synEnc, asynEnc)
+		ms := New(synEnc, asynEnc)
 
 		myAccount := entity.Account{UserId: 1, ServiceId: 2, Login: "ebumba", Password: "bibaboba123"}
 		id, err := ms.AddAccount(secretKey, myAccount)

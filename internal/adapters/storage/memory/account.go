@@ -6,7 +6,7 @@ import (
 	"gopass/internal/entity"
 )
 
-func (ms *MemoryStorage) AddAccount(key string, account entity.Account) (int64, error) {
+func (ms *Storage) AddAccount(key string, account entity.Account) (int64, error) {
 	ms.Lock()
 	defer ms.Unlock()
 
@@ -22,7 +22,7 @@ func (ms *MemoryStorage) AddAccount(key string, account entity.Account) (int64, 
 	return account.Id, nil
 }
 
-func (ms *MemoryStorage) GetAccount(key string, id int64) (entity.Account, error) {
+func (ms *Storage) GetAccount(key string, id int64) (entity.Account, error) {
 	ms.RLock()
 	defer ms.RUnlock()
 
@@ -41,7 +41,7 @@ func (ms *MemoryStorage) GetAccount(key string, id int64) (entity.Account, error
 	return result, nil
 }
 
-func (ms *MemoryStorage) GetAccountsByServiceId(key string, serviceId int64) ([]entity.Account, error) {
+func (ms *Storage) GetAccountsByServiceId(key string, serviceId int64) ([]entity.Account, error) {
 	ms.RLock()
 	defer ms.RUnlock()
 
@@ -63,7 +63,7 @@ func (ms *MemoryStorage) GetAccountsByServiceId(key string, serviceId int64) ([]
 	return result, nil
 }
 
-func (ms *MemoryStorage) DeleteAccount(id int64) error {
+func (ms *Storage) DeleteAccount(id int64) error {
 	ms.Lock()
 	defer ms.Unlock()
 

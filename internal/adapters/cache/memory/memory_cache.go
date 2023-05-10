@@ -1,4 +1,4 @@
-package memory_cache
+package memory
 
 import (
 	"fmt"
@@ -8,17 +8,17 @@ import (
 	"time"
 )
 
-type MemoryCache struct {
+type Cache struct {
 	sync.RWMutex
 	data map[int64]entity.AuthData
 }
 
-func NewMemoryCache() *MemoryCache {
+func New() *Cache {
 	data := make(map[int64]entity.AuthData)
-	return &MemoryCache{data: data}
+	return &Cache{data: data}
 }
 
-func (mc *MemoryCache) GetKey(userId int64) (string, error) {
+func (mc *Cache) GetKey(userId int64) (string, error) {
 	mc.RLock()
 	defer mc.RUnlock()
 
@@ -29,7 +29,7 @@ func (mc *MemoryCache) GetKey(userId int64) (string, error) {
 	}
 }
 
-func (mc *MemoryCache) AddKey(userId int64, key string, lifetime time.Duration) error {
+func (mc *Cache) AddKey(userId int64, key string, lifetime time.Duration) error {
 	mc.Lock()
 	defer mc.Unlock()
 
@@ -49,7 +49,7 @@ func (mc *MemoryCache) AddKey(userId int64, key string, lifetime time.Duration) 
 	return nil
 }
 
-func (mc *MemoryCache) DeleteKey(userId int64) error {
+func (mc *Cache) DeleteKey(userId int64) error {
 	mc.Lock()
 	defer mc.Unlock()
 

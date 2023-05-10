@@ -1,4 +1,4 @@
-package memory_cache
+package memory
 
 import (
 	"github.com/stretchr/testify/assert"
@@ -10,7 +10,7 @@ import (
 
 func TestMemoryCache(t *testing.T) {
 	t.Run("simple", func(t *testing.T) {
-		mc := NewMemoryCache()
+		mc := New()
 		myAuthData := entity.AuthData{
 			UserId: 5,
 			Key:    "bibaboba",

@@ -12,7 +12,7 @@ func TestUserInteractor(t *testing.T) {
 		se := encrypter.NewAESEncrypter()
 		ae := encrypter.NewBcryptEncrypter()
 
-		storage := memory.NewMemoryStorage(se, ae)
+		storage := memory.New(se, ae)
 
 		uin := NewUserInteractor(storage, ae)
 

@@ -6,7 +6,7 @@ import (
 	"gopass/internal/entity"
 )
 
-func (ms *MemoryStorage) AddService(service entity.Service) (int64, error) {
+func (ms *Storage) AddService(service entity.Service) (int64, error) {
 	ms.Lock()
 	defer ms.Unlock()
 
@@ -17,7 +17,7 @@ func (ms *MemoryStorage) AddService(service entity.Service) (int64, error) {
 	return service.Id, nil
 }
 
-func (ms *MemoryStorage) GetService(id int64) (entity.Service, error) {
+func (ms *Storage) GetService(id int64) (entity.Service, error) {
 	ms.RLock()
 	defer ms.RUnlock()
 
@@ -28,7 +28,7 @@ func (ms *MemoryStorage) GetService(id int64) (entity.Service, error) {
 	return ms.serviceData[id], nil
 }
 
-func (ms *MemoryStorage) GetServiceByName(name string) (entity.Service, error) {
+func (ms *Storage) GetServiceByName(name string) (entity.Service, error) {
 	ms.RLock()
 	defer ms.RUnlock()
 
@@ -41,7 +41,7 @@ func (ms *MemoryStorage) GetServiceByName(name string) (entity.Service, error) {
 	return entity.Service{}, fmt.Errorf("memoryStorage.GetServiceByName(): %w", storage.ErrServiceNotFound)
 }
 
-func (ms *MemoryStorage) DeleteService(id int64) error {
+func (ms *Storage) DeleteService(id int64) error {
 	ms.Lock()
 	defer ms.Unlock()
 
